@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField,HiddenField
+from wtforms import StringField, SubmitField, HiddenField
 
 import data_provider
 
@@ -17,6 +17,14 @@ class BookingForm(FlaskForm):
     clientWeekday = HiddenField("mon")
     clientTime = HiddenField("12:00")
     clientTeacher = HiddenField("10")
+
+
+class Booking:
+    def __init__(self, weekday, hour, name, phone):
+        self.weekday = weekday
+        self.hour = hour
+        self.name = name
+        self.phone = phone
 
 
 @app.route('/')
@@ -56,7 +64,7 @@ def render_booking(teacher_id, day_of_the_week, time):
                            form=form)
 
 
-@app.route('/booking_done/', methods=["GET","POST"])
+@app.route('/booking_done/', methods=["GET", "POST"])
 def render_booking_done():
     form = BookingForm()
     name = form.clientName.data
@@ -64,7 +72,9 @@ def render_booking_done():
     weekday = weekdays[form.clientWeekday.data]
     time = form.clientTime.data
     phone = form.clientPhone.data
-    return render_template('booking_done.html',name=name, weekday=weekday, time=time, phone=phone)
+    booking = Booking(weekday, time, name, phone)
+    data_provider.save_booking(booking)
+    return render_template('booking_done.html', name=name, weekday=weekday, time=time, phone=phone)
 
 
 if __name__ == '__main__':

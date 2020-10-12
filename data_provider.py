@@ -31,4 +31,18 @@ def whole_week():
     }
 
 
-print(get_goal('relocate'))
+
+
+
+def save_booking(booking):
+    with open("booking.json", "r") as f:
+        bookings = json.load(f)
+        bookings.append(booking.__dict__)
+
+    with open("booking.json", "w") as f:
+        json.dump(bookings, f,
+                  ensure_ascii=False,
+                  sort_keys=True,
+                  indent=4,
+                  separators=(',', ': ')
+                  )
