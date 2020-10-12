@@ -56,9 +56,15 @@ def render_booking(teacher_id, day_of_the_week, time):
                            form=form)
 
 
-@app.route('/booking_done/')
+@app.route('/booking_done/', methods=["GET","POST"])
 def render_booking_done():
-    return render_template('booking_done.html')
+    form = BookingForm()
+    name = form.clientName.data
+    weekdays = data_provider.whole_week()
+    weekday = weekdays[form.clientWeekday.data]
+    time = form.clientTime.data
+    phone = form.clientPhone.data
+    return render_template('booking_done.html',name=name, weekday=weekday, time=time, phone=phone)
 
 
 if __name__ == '__main__':
