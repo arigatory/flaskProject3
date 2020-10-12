@@ -1,7 +1,22 @@
 from flask import Flask
 from flask import render_template
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField,HiddenField
+
+import data_provider
+
 app = Flask(__name__)
+app.secret_key = '42'
+
+
+class BookingForm(FlaskForm):
+    clientName = StringField("Вас зовут")
+    clientPhone = StringField("Ваш телефон")
+    submit = SubmitField("Записаться на пробный урок")
+    clientWeekday = HiddenField("mon")
+    clientTime = HiddenField("12:00")
+    clientTeacher = HiddenField("10")
 
 
 @app.route('/')
@@ -10,13 +25,16 @@ def render_main():
 
 
 @app.route('/goals/<goal>/')
-def render_doals(goal):
+def render_goals(goal):
     return render_template('goal.html', goal=goal)
 
 
-@app.route('/profiles/<teacher_id>/')
+@app.route('/profiles/<int:teacher_id>/')
 def render_profiles(teacher_id):
-    return render_template('profile.html', teacher_id=teacher_id)
+    teacher = data_provider.get_teacher(teacher_id)
+    goals = [data_provider.get_goal(k) for k in teacher['goals']]
+    week = data_provider.whole_week()
+    return render_template('profile.html', teacher=teacher, goals=goals, week=week)
 
 
 @app.route('/request/')
@@ -29,9 +47,13 @@ def render_request_done():
     return render_template('request_done.html')
 
 
-@app.route('/booking/<teacher_id>/<day_of_the_week>/<time>/')
+@app.route('/booking/<int:teacher_id>/<day_of_the_week>/<time>/', methods=['GET', 'POST'])
 def render_booking(teacher_id, day_of_the_week, time):
-    return render_template('booking.html', teacher_id=teacher_id, day_of_the_week=day_of_the_week, time=teacher_id)
+    teacher = data_provider.get_teacher(teacher_id)
+    week = data_provider.whole_week()
+    form = BookingForm()
+    return render_template('booking.html', teacher=teacher, day_of_the_week=day_of_the_week, time=time, week=week,
+                           form=form)
 
 
 @app.route('/booking_done/')

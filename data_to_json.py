@@ -16,4 +16,10 @@ with open("teachers.json", "w") as f:
 #     contents = f.read()
 # teachers = json.loads(contents)
 
-
+with open("goals.json", "w") as f:
+    json.dump(data.goals, f,
+              ensure_ascii=False,
+              sort_keys=True,
+              indent=4,
+              separators=(',', ': ')
+              )
