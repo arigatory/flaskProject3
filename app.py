@@ -29,7 +29,7 @@ class Booking:
 
 @app.route('/')
 def render_main():
-    return render_template('index.html')
+    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_teachers())
 
 
 @app.route('/goals/<goal>/')
