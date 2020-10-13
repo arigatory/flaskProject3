@@ -1,13 +1,27 @@
 from flask import Flask
 from flask import render_template
+import random
 
 from flask_wtf import FlaskForm
+from jinja2 import environment
 from wtforms import StringField, SubmitField, HiddenField
 
 import data_provider
 
 app = Flask(__name__)
 app.secret_key = '42'
+
+
+def filter_shuffle(seq):
+    try:
+        result = list(seq)
+        random.shuffle(result)
+        return result
+    except:
+        return seq
+
+
+app.jinja_env.filters['shuffle'] = filter_shuffle
 
 
 class BookingForm(FlaskForm):
