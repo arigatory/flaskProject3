@@ -1,4 +1,5 @@
 import json
+import random
 
 
 def get_teacher(id):
@@ -10,10 +11,17 @@ def get_teacher(id):
     return None
 
 
-def get_teachers():
-    with open("teachers.json", "r", encoding='utf8') as f:
-        teachers = json.load(f)
-        return teachers
+def get_teachers(n=0):
+    try:
+        with open("teachers.json", "r", encoding='utf8') as f:
+            teachers = json.load(f)
+            random.shuffle(teachers)
+            if n == 0:
+                return teachers
+            else:
+                return teachers[:n]
+    except FileNotFoundError:
+        return []
 
 
 def get_goal(key):

@@ -1,6 +1,5 @@
 from flask import Flask
 from flask import render_template
-import random
 
 from flask_wtf import FlaskForm
 from jinja2 import environment
@@ -10,18 +9,6 @@ import data_provider
 
 app = Flask(__name__)
 app.secret_key = '42'
-
-
-def filter_shuffle(seq):
-    try:
-        result = list(seq)
-        random.shuffle(result)
-        return result
-    except:
-        return seq
-
-
-app.jinja_env.filters['shuffle'] = filter_shuffle
 
 
 class BookingForm(FlaskForm):
@@ -43,6 +30,10 @@ class Booking:
 
 @app.route('/')
 def render_main():
+    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_teachers(6))
+
+@app.route('/all/')
+def render_all():
     return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_teachers())
 
 
