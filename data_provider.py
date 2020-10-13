@@ -2,7 +2,7 @@ import json
 
 
 def get_teacher(id):
-    with open("teachers.json", "r") as f:
+    with open("teachers.json", "r", encoding='utf8') as f:
         teachers = json.load(f)
     for t in teachers:
         if t['id'] == id:
@@ -10,8 +10,14 @@ def get_teacher(id):
     return None
 
 
+def get_teachers():
+    with open("teachers.json", "r", encoding='utf8') as f:
+        teachers = json.load(f)
+        return teachers
+
+
 def get_goal(key):
-    with open("goals.json", "r") as f:
+    with open("goals.json", "r", encoding='utf8') as f:
         goals = json.load(f)
     for k, v in goals.items():
         if k == key:
@@ -31,15 +37,18 @@ def whole_week():
     }
 
 
-
+def get_goals():
+    with open("goals.json", "r", encoding='utf8') as f:
+        goals = json.load(f)
+        return goals
 
 
 def save_booking(booking):
-    with open("booking.json", "r") as f:
+    with open("booking.json", "r", encoding='utf8') as f:
         bookings = json.load(f)
         bookings.append(booking.__dict__)
 
-    with open("booking.json", "w") as f:
+    with open("booking.json", "w", encoding='utf8') as f:
         json.dump(bookings, f,
                   ensure_ascii=False,
                   sort_keys=True,

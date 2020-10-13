@@ -34,7 +34,9 @@ def render_main():
 
 @app.route('/goals/<goal>/')
 def render_goals(goal):
-    return render_template('goal.html', goal=goal)
+    goals = data_provider.get_goals()
+    teachers = data_provider.get_teachers()
+    return render_template('goal.html', goals=goals, goal=goal, teachers=teachers)
 
 
 @app.route('/profiles/<int:teacher_id>/')
