@@ -1,5 +1,6 @@
 import json
 import random
+from dataclasses import asdict
 
 
 def get_teacher(id):
@@ -11,7 +12,7 @@ def get_teacher(id):
     return None
 
 
-def get_teachers(n=0):
+def get_random_teachers(n=0):
     try:
         with open("teachers.json", "r", encoding='utf8') as f:
             teachers = json.load(f)
@@ -54,7 +55,7 @@ def get_goals():
 def save_booking(booking):
     with open("booking.json", "r", encoding='utf8') as f:
         bookings = json.load(f)
-        bookings.append(booking.__dict__)
+        bookings.append(asdict(booking))
 
     with open("booking.json", "w", encoding='utf8') as f:
         json.dump(bookings, f,

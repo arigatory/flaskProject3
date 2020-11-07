@@ -1,8 +1,9 @@
+from dataclasses import dataclass
+
 from flask import Flask
 from flask import render_template
 
 from flask_wtf import FlaskForm
-from jinja2 import environment
 from wtforms import StringField, SubmitField, HiddenField
 
 import data_provider
@@ -19,7 +20,7 @@ class BookingForm(FlaskForm):
     clientTime = HiddenField("12:00")
     clientTeacher = HiddenField("10")
 
-
+@dataclass
 class Booking:
     def __init__(self, weekday, hour, name, phone):
         self.weekday = weekday
@@ -30,17 +31,18 @@ class Booking:
 
 @app.route('/')
 def render_main():
-    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_teachers(6))
+    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_random_teachers(6))
+
 
 @app.route('/all/')
 def render_all():
-    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_teachers())
+    return render_template('index.html', goals=data_provider.get_goals(), teachers=data_provider.get_random_teachers())
 
 
 @app.route('/goals/<goal>/')
 def render_goals(goal):
     goals = data_provider.get_goals()
-    teachers = data_provider.get_teachers()
+    teachers = data_provider.get_random_teachers()
     return render_template('goal.html', goals=goals, goal=goal, teachers=teachers)
 
 
